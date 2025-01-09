@@ -1,0 +1,42 @@
+Liste of modification made in pyMEDEAS v2.0 (base) code.
+
+- models\europe\modules_pymedeas_eu\energy\supply\res_elec_capacities_and_generat.py: curtailment_res(), lines 122-144. Assumption: half curtailment = PV, quarter = wind off/on
+
+    Integration of new curtailment variable from surrogate model.
+
+                                                                                    res_elec_tot_overcapacity(), lines 622-627
+
+    Bug found, see Enric mail: 
+     zidz(potential_tot_generation_res_elec_twh(), fe_real_tot_generation_res_elec()) becomes-> zidz(potential tot generation RES elec TWh-FE tot generation RES elec,potential tot generation RES elec TWh).
+    which becomes return curtailment_delayed()
+
+                                                                                    cp_res_elec(), lines 58-64
+
+    Cp reduction from DeLaRue formulas: 
+    return np.maximum(min_cp_baseload_res(), cpini_res_elec() * shortage_bioe_for_elec()) becomes return np.maximum(min_cp_baseload_res(), cpini_res_elec() * (1/(1+res_elec_tot_overcapacity())))
+
+    
+- (TO DO) models\europe\modules_pymedeas_eu\energy\supply\res_elec_total_monetary_investment.py: grid_reinforcement_costs, lines 140-151. 
+    
+    Improvements of investments definition. 
+
+- models\europe\modules_pymedeas_eu\energy\supply\res_elec_capacities_and_generat.py: installed_capacity_res_elec(), lines 225-232.
+    
+    Additionnal res installation that comes from SM feedback control. (load shedding)
+
+- models\europe\modules_pymedeas_eu\energy\storage\storage_demand_and_supply.py: total_capacity_elec_storage_tw(), line 308.
+
+    Additionnal storage installation that comes from SM feedback control. (curtailment)
+
+- models\europe\modules_pymedeas_eu\_modules.json: line 1-30.
+
+    Add the created new variable in MEDEAS. 
+
+- models\europe\_subscripts_pymedeas_eu.json: lines 1-20.
+
+    Add subscripts used with investments_shares() and ratios_EUR_MW_new_capacities(), both defined in investments.py
+
+- models\europe\modules_pymedeas_eu\energy\supply\res_elec_potentials.py:
+
+    RES potentials modified, see Section 5.2.1
+
